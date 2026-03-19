@@ -11,7 +11,7 @@ resources:
       name: channaM/PowerAppsTestAutomation
       ref: master
       # Name of the GitHub OAuth ADO Service Connection
-      endpoint: github.com_channaM
+      endpoint: channaM
 
 parameters:
  - name: image
