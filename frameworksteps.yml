@@ -26,6 +26,7 @@ steps:
       displayName: 'Set Agent Screen Resolution to 1920x1080'
 
     - task: NuGetToolInstaller@1
+    
     - script: nuget restore $(Build.SourcesDirectory)\PowerAppsTestAutomation\PowerAppsTestAutomation.sln
       displayName: 'Force NuGet Restore'
 
