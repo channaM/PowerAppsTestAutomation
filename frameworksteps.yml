@@ -24,7 +24,10 @@ steps:
       ignoreLASTEXITCODE: true
 
       displayName: 'Set Agent Screen Resolution to 1920x1080'
-
+      
+    - script: dotnet nuget locals all --clear
+      displayName: Clear NuGet Cache
+      
     - task: NuGetToolInstaller@1
     
     - script: nuget restore $(Build.SourcesDirectory)\PowerAppsTestAutomation\PowerAppsTestAutomation.sln
@@ -37,8 +40,7 @@ steps:
       inputs:
 
         restoreSolution: '${{parameters.RepositoryName}}/PowerAppsTestAutomation.sln'
-    - script: dotnet nuget locals all --clear
-      displayName: Clear NuGet Cache
+    
 
     - task: VSBuild@1
 
