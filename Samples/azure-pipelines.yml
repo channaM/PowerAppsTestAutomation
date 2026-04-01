@@ -72,9 +72,14 @@ jobs:
   - task: NuGetAuthenticate@1
 
   - task: NuGetCommand@2
-    displayName: Restore NuGet Packages
+    displayName: Restore Self Repo
     inputs:
-      restoreSolution: '**/*.sln'
+      restoreSolution: '$(Build.SourcesDirectory)/**/*.sln'
+
+  - task: NuGetCommand@2
+    displayName: Restore PowerAppsTestAutomation Repo
+    inputs:
+      restoreSolution: '$(Build.SourcesDirectory)/PowerAppsTestAutomation/**/*.sln'
 
   # Optional but helpful if cache issue
   - script: dotnet nuget locals all --clear
