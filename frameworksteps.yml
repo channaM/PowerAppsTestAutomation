@@ -30,9 +30,17 @@ steps:
       
     - task: NuGetToolInstaller@1
     
-    - script: nuget restore $(Build.SourcesDirectory)\PowerAppsTestAutomation\PowerAppsTestAutomation.sln
-      displayName: 'Force NuGet Restore'
+    - script: |
+        echo "Clearing cache..."
+        dotnet nuget locals all --clear
 
+        echo "Restoring solution..."
+        dotnet restore $(Build.SourcesDirectory)\PowerAppsTestAutomation\PowerAppsTestAutomation.sln
+
+        echo "Restoring ALL projects (fallback)..."
+        for /r $(Build.SourcesDirectory)\PowerAppsTestAutomation %%f in (*.csproj) do dotnet restore "%%f"
+      displayName: FULL Restore (Solution + All Projects)
+  
     - task: NuGetCommand@2
 
       displayName: 'Restore NuGet Packages'
