@@ -65,6 +65,21 @@ jobs:
   steps:
   - checkout: self
   - checkout: PowerAppsTestAutomation
+
+  # ✅ FIX: Restore NuGet packages
+  - task: NuGetToolInstaller@1
+
+  - task: NuGetAuthenticate@1
+
+  - task: NuGetCommand@2
+    displayName: Restore NuGet Packages
+    inputs:
+      restoreSolution: '**/*.sln'
+
+  # Optional but helpful if cache issue
+  - script: dotnet nuget locals all --clear
+    displayName: Clear NuGet Cache
+
   #- template: localsteps.yml # Provide optional local YAML template here
   - template: frameworksteps.yml@PowerAppsTestAutomation
     parameters:
@@ -72,7 +87,6 @@ jobs:
       OnlinePassword: $(OnlinePassword)
       OnlineUrl: $(PortalUrl)
       BrowserType: ${{ parameters.BrowserType }}
-      # File location format is /s/TeamProjectName/FilePathToTestAutomationURLs.json
       TestAutomationURLFilePath: $(Build.SourcesDirectory)\$(LocalProjectName)\$(TestUrlFileName)
       UsePrivateMode: $(PrivateMode)
       LoginMethod: ${{ parameters.LoginMethod }}
