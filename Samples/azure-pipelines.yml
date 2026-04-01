@@ -66,15 +66,6 @@ jobs:
   - checkout: self
   - checkout: PowerAppsTestAutomation
 
-
-  # ✅ Clear cache
-  - script: dotnet nuget locals all --clear
-    displayName: Clear NuGet Cache
-
-  # ✅ Restore EVERYTHING (both repos)
-  - script: dotnet restore $(Build.SourcesDirectory)
-    displayName: Restore ALL projects
-
   #- template: localsteps.yml # Provide optional local YAML template here
   - template: frameworksteps.yml@PowerAppsTestAutomation
     parameters:
