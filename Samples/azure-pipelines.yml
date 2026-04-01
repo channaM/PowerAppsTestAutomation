@@ -66,27 +66,14 @@ jobs:
   - checkout: self
   - checkout: PowerAppsTestAutomation
 
-  # ✅ FIX: Restore NuGet packages
-  - task: NuGetToolInstaller@1
 
-  - task: NuGetAuthenticate@1
-
-  - task: NuGetCommand@2
-    displayName: Restore Self Repo
-    inputs:
-      restoreSolution: '$(Build.SourcesDirectory)/**/*.sln'
-
-  - task: NuGetCommand@2
-    displayName: Restore PowerAppsTestAutomation Repo
-    inputs:
-      restoreSolution: '$(Build.SourcesDirectory)/PowerAppsTestAutomation/**/*.sln'
-
-  # Optional but helpful if cache issue
+  # ✅ Clear cache
   - script: dotnet nuget locals all --clear
     displayName: Clear NuGet Cache
-    
+
+  # ✅ Restore EVERYTHING (both repos)
   - script: dotnet restore $(Build.SourcesDirectory)
-    displayName: Restore all projects
+    displayName: Restore ALL projects
 
   #- template: localsteps.yml # Provide optional local YAML template here
   - template: frameworksteps.yml@PowerAppsTestAutomation
