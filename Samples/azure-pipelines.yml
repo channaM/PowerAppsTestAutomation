@@ -84,6 +84,9 @@ jobs:
   # Optional but helpful if cache issue
   - script: dotnet nuget locals all --clear
     displayName: Clear NuGet Cache
+    
+  - script: dotnet restore $(Build.SourcesDirectory)
+    displayName: Restore all projects
 
   #- template: localsteps.yml # Provide optional local YAML template here
   - template: frameworksteps.yml@PowerAppsTestAutomation
