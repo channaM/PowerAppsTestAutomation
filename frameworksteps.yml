@@ -12,7 +12,7 @@ parameters:
 
 steps:
 
-# ✅ Set screen resolution (needed for UI tests)
+# ✅ Set screen resolution (UI tests)
 - powershell: |
     Set-DisplayResolution -Width 1920 -Height 1080 -Force
     Start-Sleep -s 10
@@ -20,7 +20,7 @@ steps:
   displayName: 'Set Agent Screen Resolution'
   ignoreLASTEXITCODE: true
 
-# ✅ Ensure correct .NET SDK
+# ✅ Install .NET SDK
 - task: UseDotNet@2
   displayName: 'Install .NET SDK'
   inputs:
@@ -34,7 +34,7 @@ steps:
 - script: dotnet nuget locals all --clear
   displayName: 'Clear NuGet Cache'
 
-# ✅ Restore with runtime (IMPORTANT FIX)
+# ✅ Restore (WITH runtime fix)
 - task: DotNetCoreCLI@2
   displayName: 'Restore Solution (win-x64)'
   inputs:
@@ -42,13 +42,7 @@ steps:
     projects: '${{ parameters.RepositoryName }}/PowerAppsTestAutomation.sln'
     arguments: '--runtime win-x64'
 
-# ✅ Optional: Explicit restore again for safety (same runtime)
-- script: |
-    echo "Ensuring restore with runtime..."
-    dotnet restore ${{ parameters.RepositoryName }}/PowerAppsTestAutomation.sln --runtime win-x64
-  displayName: 'Force Restore with Runtime'
-
-# ✅ Build solution
+# ✅ Build
 - task: VSBuild@1
   displayName: 'Build Solution'
   inputs:
@@ -56,7 +50,7 @@ steps:
     platform: 'Any CPU'
     configuration: 'Debug'
 
-# ✅ Run tests - Chrome
+# ✅ Run Chrome tests
 - task: VSTest@2
   displayName: 'Run Tests - Chrome'
   condition: or(eq('${{ parameters.BrowserType }}', 'Chrome'), eq('${{ parameters.BrowserType }}', 'All'))
@@ -78,7 +72,7 @@ steps:
     testRunTitle: 'Chrome UI Tests'
   continueOnError: true
 
-# ✅ Run tests - Firefox
+# ✅ Run Firefox tests
 - task: VSTest@2
   displayName: 'Run Tests - Firefox'
   condition: or(eq('${{ parameters.BrowserType }}', 'Firefox'), eq('${{ parameters.BrowserType }}', 'All'))
@@ -100,6 +94,6 @@ steps:
     testRunTitle: 'Firefox UI Tests'
   continueOnError: true
 
-# ✅ Debug (optional but helpful)
+# ✅ Debug (optional)
 - script: dotnet list ${{ parameters.RepositoryName }}/PowerAppsTestAutomation.sln package
   displayName: 'List Installed NuGet Packages'
