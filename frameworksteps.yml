@@ -40,6 +40,11 @@ steps:
         echo "Restoring ALL projects (fallback)..."
         for /r $(Build.SourcesDirectory)\PowerAppsTestAutomation %%f in (*.csproj) do dotnet restore "%%f"
       displayName: FULL Restore (Solution + All Projects)
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
   
     - task: NuGetCommand@2
 
