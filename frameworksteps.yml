@@ -25,22 +25,28 @@ steps:
   displayName: 'Install .NET SDK'
   inputs:
     packageType: 'sdk'
-    version: '6.x'   # adjust if needed
+    version: '6.x'
 
 # ✅ Install NuGet
 - task: NuGetToolInstaller@1
 
-# ✅ Clear NuGet cache (prevents broken dependency issues)
+# ✅ Clear NuGet cache
 - script: dotnet nuget locals all --clear
   displayName: 'Clear NuGet Cache'
 
-# ✅ Restore with runtime (FIX for your error)
+# ✅ Restore with runtime (IMPORTANT FIX)
 - task: DotNetCoreCLI@2
-  displayName: 'Restore Solution'
+  displayName: 'Restore Solution (win-x64)'
   inputs:
     command: 'restore'
     projects: '${{ parameters.RepositoryName }}/PowerAppsTestAutomation.sln'
     arguments: '--runtime win-x64'
+
+# ✅ Optional: Explicit restore again for safety (same runtime)
+- script: |
+    echo "Ensuring restore with runtime..."
+    dotnet restore ${{ parameters.RepositoryName }}/PowerAppsTestAutomation.sln --runtime win-x64
+  displayName: 'Force Restore with Runtime'
 
 # ✅ Build solution
 - task: VSBuild@1
@@ -50,7 +56,7 @@ steps:
     platform: 'Any CPU'
     configuration: 'Debug'
 
-# ✅ Run tests in Chrome
+# ✅ Run tests - Chrome
 - task: VSTest@2
   displayName: 'Run Tests - Chrome'
   condition: or(eq('${{ parameters.BrowserType }}', 'Chrome'), eq('${{ parameters.BrowserType }}', 'All'))
@@ -72,7 +78,7 @@ steps:
     testRunTitle: 'Chrome UI Tests'
   continueOnError: true
 
-# ✅ Run tests in Firefox
+# ✅ Run tests - Firefox
 - task: VSTest@2
   displayName: 'Run Tests - Firefox'
   condition: or(eq('${{ parameters.BrowserType }}', 'Firefox'), eq('${{ parameters.BrowserType }}', 'All'))
@@ -94,6 +100,6 @@ steps:
     testRunTitle: 'Firefox UI Tests'
   continueOnError: true
 
-# ✅ Debug step (optional but VERY useful)
+# ✅ Debug (optional but helpful)
 - script: dotnet list ${{ parameters.RepositoryName }}/PowerAppsTestAutomation.sln package
   displayName: 'List Installed NuGet Packages'
