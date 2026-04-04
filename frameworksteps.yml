@@ -56,7 +56,7 @@ steps:
   condition: or(eq('${{ parameters.BrowserType }}', 'Chrome'), eq('${{ parameters.BrowserType }}', 'All'))
   inputs:
     testAssemblyVer2: |
-      ${{ parameters.RepositoryName }}\Microsoft.PowerApps.TestAutomation.Tests\bin\Debug\Microsoft.PowerApps.TestAutomation.Tests.dll
+      **\Microsoft.PowerApps.TestAutomation.Tests.dll
     testFiltercriteria: 'TestCategory=PowerAppsTestAutomation'
     uiTests: true
     runSettingsFile: '${{ parameters.RepositoryName }}/Microsoft.PowerApps.TestAutomation.Tests/patestautomation.runsettings'
@@ -78,7 +78,7 @@ steps:
   condition: or(eq('${{ parameters.BrowserType }}', 'Firefox'), eq('${{ parameters.BrowserType }}', 'All'))
   inputs:
     testAssemblyVer2: |
-      ${{ parameters.RepositoryName }}\Microsoft.PowerApps.TestAutomation.Tests\bin\Debug\Microsoft.PowerApps.TestAutomation.Tests.dll
+      **\Microsoft.PowerApps.TestAutomation.Tests.dll
     testFiltercriteria: 'TestCategory=PowerAppsTestAutomation'
     uiTests: true
     runSettingsFile: '${{ parameters.RepositoryName }}/Microsoft.PowerApps.TestAutomation.Tests/patestautomation.runsettings'
